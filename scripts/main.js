@@ -35,10 +35,15 @@ $('#view').click(async function loadProfile() {
     $('#friends').empty();
 
     if (friends.length === 0) $('#friends').append($('<div>').text("This user has no friends :'( "))
-    
+
     friends.forEach(async (friend) => {
-      await fetcher.load(friend);
-      const fullName = store.any(friend, FOAF('name'));
-      $('#friends').append($('<li>').text(fullName && fullName.value || friend.value));
+        await fetcher.load(friend);
+        const fullName = store.any(friend, FOAF('name'));
+
+        $('#friends').append(
+            $('<li>').append(
+                $('<a>').text(fullName && fullName.value || friend.value)
+                .click(() => $('#profile').val(friend.value))
+                .click(loadProfile)));
     });
 });
